@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../model/users.model");
+const { jsonResponse } = require("../lib/jsonResponse");
+const createError = require("http-errors");
 
 router.get("/", async function (req, res, next) {
   let results = {};
@@ -11,21 +13,19 @@ router.get("/", async function (req, res, next) {
   res.json(results);
 });
 
-router.post('/', async function(req, res, next) {
-  const {username, password} = req.body;
+router.post("/", async function (req, res, next) {
+  const { username, password } = req.body;
 
-  if(!username || !password){
-    next();
-  }else{
-    const user = new User({username, password});
+  if (!username || !password) {
+    next(createError(400, "Username and/or password missing"));
+  } else {
+    const user = new User({ username, password });
 
     const exists = await user.usernameExists(username);
 
-    if(exists){
-      res.json({
-        message: 'user exists'
-      });
-    }else{
+    if (exists) {
+      next(createError(400, "This User exist"));
+    } else {
       await user.save();
       res.json({
         message: "User register",
@@ -33,6 +33,5 @@ router.post('/', async function(req, res, next) {
     }
   }
 });
-
 
 module.exports = router;
