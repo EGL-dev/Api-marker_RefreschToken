@@ -27,9 +27,9 @@ router.post("/", async function (req, res, next) {
       next(createError(400, "This User exist"));
     } else {
       await user.save();
-      res.json({
-        message: "User register",
-      });
+      res.json(jsonResponse(200,{
+        mesagge:'User created'
+      }))
     }
   }
 });
