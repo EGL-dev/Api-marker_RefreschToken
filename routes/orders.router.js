@@ -36,7 +36,7 @@ router.post('/', async(req,res,next)=>{
         }
 
         res.json(jsonResponse(200,{
-            message:`Order created successfully`
+            message:`Order created successfuly`
         }));
 
 
